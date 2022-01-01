@@ -10,6 +10,7 @@ import TestConnection from "../../screens/Onboard/TestConnection";
 import ConnectLnd from "../../screens/Onboard/ConnectLnd";
 import ConnectLndHub from "../../screens/Onboard/ConnectLndHub";
 import ConnectLnbits from "../../screens/Onboard/ConnectLnbits";
+import ConnectCitadel from "../../screens/Onboard/ConnectCitadel";
 import NewWallet from "../../screens/Onboard/NewWallet";
 
 const routes = [
@@ -23,6 +24,7 @@ const routes = [
       { path: "lnd", element: <ConnectLnd /> },
       { path: "lnd-hub", element: <ConnectLndHub /> },
       { path: "lnbits", element: <ConnectLnbits /> },
+      { path: "citadel", element: <ConnectCitadel /> },
       { path: "create-wallet", element: <NewWallet /> },
     ],
   },

@@ -4,6 +4,7 @@ import lnbits from "/static/assets/icons/lnbits.png";
 import lndhub from "/static/assets/icons/lndhub.png";
 import lnd from "/static/assets/icons/lnd.png";
 import alby from "/static/assets/icons/alby.png";
+import citadel from "/static/assets/icons/citadel.png";
 
 export default function ChooseConnector() {
   const connectors = [
@@ -24,6 +25,12 @@ export default function ChooseConnector() {
       title: "LNbits",
       description: "Connect to your LNbits account",
       logo: lnbits,
+    },
+    {
+      to: "citadel",
+      title: "Citadel",
+      description: "Connect to your local Citadel",
+      logo: citadel,
     },
     {
       to: "create-wallet",
