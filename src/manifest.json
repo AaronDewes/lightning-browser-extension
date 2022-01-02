@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "Alby - Bitcoin Lightning Wallet",
+  "name": "Alby with Citadel connection suport (Beta)",
   "version": "1.0.1",
 
   "icons": {
@@ -9,7 +9,7 @@
     "48": "assets/icons/alby_icon_yellow_48x48.png",
     "128": "assets/icons/alby_icon_yellow_128x128.png"
   },
-  "description": "The Bitcoin Lightning wallet for direct payments across the globe, Bitcoin Lightning applications and passwordless logins in your browser.",
+  "description": "A fork of Alby to add Citadel connection support.",
   "homepage_url": "https://getAlby.com/",
   "web_accessible_resources": ["js/inpageScript.bundle.js"],
   "permissions": [
@@ -23,14 +23,14 @@
 
   "content_security_policy": "script-src 'self'; object-src 'self'",
 
-  "__chrome|firefox__author": "Alby",
+  "__chrome|firefox__author": "Alby & Citadel developers",
   "__opera__developer": {
     "name": "Alby"
   },
 
   "__firefox__browser_specific_settings": {
     "gecko": {
-      "id": "extension@getalby.com"
+      "id": "citadel-alby@runcitadel.space"
     }
   },
 
@@ -45,7 +45,7 @@
       "48": "assets/icons/alby_icon_sleeping_48x48.png",
       "128": "assets/icons/alby_icon_sleeping_128x128.png"
     },
-    "default_title": "Alby - Bitcoin Lightning Wallet",
+    "default_title": "Alby with Citadel connection suport (Beta)",
     "__chrome|opera__chrome_style": false,
     "__firefox__browser_style": false
   },
