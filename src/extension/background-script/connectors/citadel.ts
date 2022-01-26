@@ -37,6 +37,14 @@ class CitadelConnector implements Connector {
     this.citadel = new Citadel(config.url);
   }
 
+  init() {
+    return Promise.resolve();
+  }
+
+  unload() {
+    return Promise.resolve();
+  }
+
   async getInfo(): Promise<GetInfoResponse> {
     await this.ensureLogin();
     const info = await this.citadel.middleware.lnd.info.generalInfo();
