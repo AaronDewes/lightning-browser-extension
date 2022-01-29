@@ -66,9 +66,14 @@ const lnurl = {
       lnurlDetails.k1 = url.searchParams.get("k1") || "";
       lnurlDetails.action = url.searchParams.get("action") || undefined;
     } else {
-      const res = await axios.get(url.toString());
-      console.log("res", res);
-      lnurlDetails = res.data;
+      try {
+        const res = await axios.get(url.toString());
+        lnurlDetails = res.data;
+      } catch (e) {
+        throw new Error(
+          "Connection problem or invalid lnurl / lightning address."
+        );
+      }
     }
     lnurlDetails.domain = url.hostname;
     lnurlDetails.url = url;
@@ -76,10 +81,12 @@ const lnurl = {
   },
   verifyInvoice({
     paymentInfo,
+    payerdata,
     metadata,
     amount,
   }: {
     paymentInfo: LNURLPaymentInfo;
+    payerdata: undefined | Record<string, string>;
     metadata: string;
     amount: number;
   }) {
@@ -88,7 +95,10 @@ const lnurl = {
     });
     let metadataHash = "";
     try {
-      metadataHash = sha256(metadata).toString(Hex);
+      const dataToHash = payerdata
+        ? metadata + JSON.stringify(payerdata)
+        : metadata;
+      metadataHash = sha256(dataToHash).toString(Hex);
     } catch (e) {
       console.error();
     }

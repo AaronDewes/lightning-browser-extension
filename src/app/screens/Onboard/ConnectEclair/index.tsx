@@ -1,18 +1,15 @@
 import { useState } from "react";
-
 import Input from "../../../components/Form/Input";
 import Button from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
 
 import utils from "../../../../common/lib/utils";
 
-import browser from "webextension-polyfill";
-
-export default function ConnectCitadel() {
+export default function ConnectLnbits() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     password: "",
-    url: "http://citadel.local",
+    url: "http://localhost:8080",
   });
   const [loading, setLoading] = useState(false);
 
@@ -23,48 +20,21 @@ export default function ConnectCitadel() {
     });
   }
 
-  function getConnectorType() {
-    if (formData.url.match(/\.onion/i)) {
-      return "nativecitadel";
-    }
-    return "citadel";
-  }
-
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
     const { password, url } = formData;
-    /** The URL with an http:// in front if the protocol is missing */
-    const fullUrl =
-      url.startsWith("http://") || url.startsWith("https://")
-        ? url
-        : `http://${url}`;
     const account = {
-      name: "Citadel",
+      name: "Eclair",
       config: {
-        url: fullUrl,
         password,
+        url,
       },
-      connector: getConnectorType(),
+      connector: "eclair",
     };
 
     try {
-      let validation;
-      // TODO: for native connectors we currently skip the validation because it is too slow (booting up Tor etc.)
-      if (account.connector === "nativecitadel") {
-        validation = { valid: true, error: "" };
-        const permissionGranted = await browser.permissions.request({
-          permissions: ["nativeMessaging"],
-        });
-        if (!permissionGranted) {
-          validation = {
-            valid: false,
-            error: "Native permissions are required to connect through Tor.",
-          };
-        }
-      } else {
-        validation = await utils.call("validateAccount", account);
-      }
+      const validation = await utils.call("validateAccount", account);
       if (validation.valid) {
         const addResult = await utils.call("addAccount", account);
         if (addResult.accountId) {
@@ -74,12 +44,15 @@ export default function ConnectCitadel() {
           navigate("/test-connection");
         }
       } else {
-        alert(`
-          Connection failed. Is your password correct? \n\n(${validation.error})`);
+        console.log(validation);
+        alert(
+          `Connection failed. Do you have the correct URL and password? \n\n(${validation.error})`
+        );
       }
     } catch (e) {
       console.error(e);
-      let message = "Connection failed. Is your password correct?";
+      let message =
+        "Connection failed. Do you have the correct URL and password?";
       if (e instanceof Error) {
         message += `\n\n${e.message}`;
       }
@@ -93,23 +66,21 @@ export default function ConnectCitadel() {
       <div className="relative lg:flex mt-14 bg-white dark:bg-gray-800 px-10 py-12">
         <div className="lg:w-1/2">
           <h1 className="text-2xl font-bold dark:text-white">
-            Connect to your Citadel Node
+            Connect to Eclair
           </h1>
-          <p className="text-gray-500 mt-6">
-            This currently doesn&apos;t work if 2FA is enabled.
-          </p>
+          <p className="text-gray-500 mt-6"></p>
           <div className="w-4/5">
             <div className="mt-6">
               <label
                 htmlFor="password"
                 className="block font-medium text-gray-700 dark:text-gray-400"
               >
-                Password
+                Eclair Password
               </label>
               <div className="mt-1">
                 <Input
                   name="password"
-                  type="password"
+                  type="text"
                   required
                   onChange={handleChange}
                 />
@@ -120,12 +91,11 @@ export default function ConnectCitadel() {
                 htmlFor="url"
                 className="block font-medium text-gray-700 dark:text-gray-400"
               >
-                Citadel URL
+                Eclair URL
               </label>
               <div className="mt-1">
                 <Input
                   name="url"
-                  placeholder="citadel.local"
                   type="text"
                   value={formData.url}
                   required

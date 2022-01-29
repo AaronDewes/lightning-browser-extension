@@ -1,10 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: implicitly has 'any' type error
-import Native from "./native";
 import Lnd from "./lnd";
+import NativeLnd from "./nativelnd";
 import LndHub from "./lndhub";
+import NativeLndHub from "./nativelndhub";
 import LnBits from "./lnbits";
+import Eclair from "./eclair";
 import Citadel from "./citadel";
+import NativeCitadel from "./nativecitadel";
 
 /*
 const initialize = (account, password) => {
@@ -15,11 +16,14 @@ const initialize = (account, password) => {
 */
 
 const connectors = {
-  native: Native,
   lnd: Lnd,
+  nativelnd: NativeLnd,
   lndhub: LndHub,
+  nativelndhub: NativeLndHub,
   lnbits: LnBits,
+  eclair: Eclair,
   citadel: Citadel,
+  nativecitadel: NativeCitadel,
 };
 
 export default connectors;

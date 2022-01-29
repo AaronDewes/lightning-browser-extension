@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { SendIcon } from "@bitcoin-design/bitcoin-icons-react/filled";
+import browser from "webextension-polyfill";
 
 import Input from "../../../components/Form/Input";
 import Button from "../../../components/Button";
@@ -26,6 +27,14 @@ export default function ConnectLnd() {
     });
   }
 
+  function getConnectorType() {
+    if (formData.url.match(/\.onion/i)) {
+      return "nativelnd";
+    }
+    // default to LND
+    return "lnd";
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
@@ -36,11 +45,27 @@ export default function ConnectLnd() {
         macaroon,
         url,
       },
-      connector: "lnd",
+      connector: getConnectorType(),
     };
 
     try {
-      const validation = await utils.call("validateAccount", account);
+      let validation;
+      // TODO: for native connectors we currently skip the validation because it is too slow (booting up Tor etc.)
+      if (account.connector === "nativelnd") {
+        validation = { valid: true, error: "" };
+        const permissionGranted = await browser.permissions.request({
+          permissions: ["nativeMessaging"],
+        });
+        if (!permissionGranted) {
+          validation = {
+            valid: false,
+            error: "Native permissions are required to connect through Tor.",
+          };
+        }
+      } else {
+        validation = await utils.call("validateAccount", account);
+      }
+
       if (validation.valid) {
         const addResult = await utils.call("addAccount", account);
         if (addResult.accountId) {
