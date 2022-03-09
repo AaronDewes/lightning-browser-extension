@@ -1,18 +1,22 @@
 import { useState } from "react";
 import Input from "../../../components/Form/Input";
+import TextField from "../../../components/Form/TextField";
 import Button from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
 import QRCode from "react-qr-code";
 
 import utils from "../../../../common/lib/utils";
 
-const url = process.env.ALBY_LNDHUB_URL || "https://lndhub.getalby.com";
+const walletCreateUrl =
+  process.env.WALLET_CREATE_URL || "https://getalby.com/api/users";
 
 export default function NewWallet() {
   const [lndHubData, setLndHubData] = useState({
     login: "",
     password: "",
+    url: "",
   });
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -25,18 +29,20 @@ export default function NewWallet() {
     headers.append("Access-Control-Allow-Origin", "*");
     headers.append("Content-Type", "application/json");
 
-    return fetch(`${url}/create`, {
+    return fetch(walletCreateUrl, {
       method: "POST",
       headers,
-      body: JSON.stringify({ partnerid: "bluewallet", accounttype: "common" }),
+      body: JSON.stringify({ email }),
     })
       .then((res) => {
         res.json().then((data) => {
-          if (data.login && data.password) {
-            setLndHubData(data);
+          if (data.lndhub?.login && data.lndhub?.password && data.lndhub?.url) {
+            setLndHubData(data.lndhub);
           } else {
             console.error(data);
-            alert("Failed to create a new wallet. Please contact support.");
+            alert(
+              "Failed to create a new wallet. Please try again and contact support."
+            );
           }
         });
       })
@@ -53,7 +59,7 @@ export default function NewWallet() {
     setLoading(true);
     event.preventDefault();
 
-    const { login, password } = lndHubData;
+    const { login, password, url } = lndHubData;
     const account = {
       name: "Alby",
       config: {
@@ -102,7 +108,7 @@ export default function NewWallet() {
                 <Input
                   name="uri"
                   type="text"
-                  value={`lndhub://${lndHubData.login}:${lndHubData.password}@${url}/`}
+                  value={`lndhub://${lndHubData.login}:${lndHubData.password}@${lndHubData.url}/`}
                   disabled
                 />
               </div>
@@ -120,7 +126,7 @@ export default function NewWallet() {
                 </div>
                 <div className="float-right">
                   <QRCode
-                    value={`lndhub://${lndHubData.login}:${lndHubData.password}@${url}/`}
+                    value={`lndhub://${lndHubData.login}:${lndHubData.password}@${lndHubData.url}/`}
                     level="M"
                     size={130}
                   />
@@ -130,10 +136,20 @@ export default function NewWallet() {
           ) : (
             <div className="w-4/5">
               <div className="mt-6 dark:text-white">
-                <strong>Remember, not your keys, not your coins. </strong>
+                <strong>We host a lightning wallet for you!</strong>
                 <br />
-                This quick setup uses a custodial service <br /> to manage your
-                wallet.
+                ...but remember: not your keys, not your coins.
+              </div>
+
+              <div className="mt-6">
+                <TextField
+                  id="email"
+                  label="Email Address"
+                  type="email"
+                  onChange={(e) => {
+                    setEmail(e.target.value.trim());
+                  }}
+                />
               </div>
             </div>
           )}

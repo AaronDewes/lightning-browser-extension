@@ -16,9 +16,13 @@ module.exports = {
         xxxs: ".5rem",
         xxs: ".625rem",
       },
+      spacing: {
+        18: "4.5rem",
+      },
       colors: {
         "orange-bitcoin": "#f7931a",
         "orange-bitcoin-700": "#e78308",
+        "orange-bitcoin-50": "#fdf0d5",
         "red-bitcoin": "#eb5757",
         "green-bitcoin": "#27ae60",
         "blue-bitcoin": "#2d9cdb",

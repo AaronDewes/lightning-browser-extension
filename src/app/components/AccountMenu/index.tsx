@@ -1,28 +1,27 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { WalletIcon } from "@bitcoin-design/bitcoin-icons-react/outline";
 import {
+  AddressBookIcon,
   CaretDownIcon,
   PlusIcon,
 } from "@bitcoin-design/bitcoin-icons-react/filled";
 
 import utils from "../../../common/lib/utils";
 import { useAuth } from "../../context/AuthContext";
+import { useAccounts } from "../../context/AccountsContext";
 
 import Badge from "../Badge";
 import Menu from "../Menu";
 
-type Accounts = Record<string, { name: string; connector: string }>;
-
 function AccountMenu() {
   const auth = useAuth();
   const navigate = useNavigate();
-  const [accounts, setAccounts] = useState<Accounts>({});
+  const { accounts, getAccounts } = useAccounts();
 
   useEffect(() => {
-    utils.call<Accounts>("getAccounts").then((response) => {
-      setAccounts(response);
-    });
+    getAccounts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function selectAccount(accountId: string) {
@@ -71,6 +70,7 @@ function AccountMenu() {
             </Menu.ItemButton>
           );
         })}
+        <Menu.Divider />
         <Menu.ItemButton
           onClick={() => {
             openOptions("accounts/new");
@@ -78,6 +78,14 @@ function AccountMenu() {
         >
           <PlusIcon className="h-5 w-5 mr-2 text-gray-500" />
           Add a new account
+        </Menu.ItemButton>
+        <Menu.ItemButton
+          onClick={() => {
+            openOptions("accounts");
+          }}
+        >
+          <AddressBookIcon className="h-5 w-5 mr-2 text-gray-500" />
+          Accounts
         </Menu.ItemButton>
       </Menu.List>
     </Menu>

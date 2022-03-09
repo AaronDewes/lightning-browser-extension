@@ -17,8 +17,8 @@ if (!process.env.FAUCET_K) {
   process.env.FAUCET_K = ""; // env variables are passed as string. empty strings are still falsy
 }
 // default value is set in the code where it is used
-if (!process.env.ALBY_LNDHUB_URL) {
-  process.env.ALBY_LNDHUB_URL = ""; // env variables are passed as string. empty strings are still falsy
+if (!process.env.WALLET_CREATE_URL) {
+  process.env.WALLET_CREATE_URL = ""; // env variables are passed as string. empty strings are still falsy
 }
 
 const viewsPath = path.join(__dirname, "static", "views");
@@ -54,10 +54,10 @@ var options = {
     background: "./src/extension/background-script/index.js",
     contentScript: "./src/extension/content-script/index.js",
     inpageScript: "./src/extension/inpage-script/index.js",
-    popup: "./src/app/router/Popup/index.jsx",
-    prompt: "./src/app/router/Prompt/index.jsx",
-    options: "./src/app/router/Options/index.jsx",
-    welcome: "./src/app/router/Welcome/index.jsx",
+    popup: "./src/app/router/Popup/index.tsx",
+    prompt: "./src/app/router/Prompt/index.tsx",
+    options: "./src/app/router/Options/index.tsx",
+    welcome: "./src/app/router/Welcome/index.tsx",
   },
 
   output: {
@@ -134,7 +134,7 @@ var options = {
     // new webpack.SourceMapDevToolPlugin({ filename: false }),
     // environmental variables
     new webpack.EnvironmentPlugin([
-      "ALBY_LNDHUB_URL",
+      "WALLET_CREATE_URL",
       "FAUCET_URL",
       "FAUCET_K",
       "NODE_ENV",

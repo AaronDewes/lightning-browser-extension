@@ -14,7 +14,7 @@ import { useAuth } from "../context/AuthContext";
 
 import Button from "../components/Button";
 import IconButton from "../components/IconButton";
-import Input from "../components/Form/Input";
+import TextField from "../components/Form/TextField";
 // import Select from "../components/Form/Select";
 import Header from "../components/Header";
 import Loading from "../components/Loading";
@@ -174,38 +174,23 @@ function Receive() {
           renderInvoice()
         ) : (
           <>
-            <div className="mt-2 mb-4">
-              <label
-                htmlFor="amount"
-                className="block font-medium text-gray-700 dark:text-white"
-              >
-                Amount
-              </label>
-              <div className="mt-1">
-                <Input
-                  name="amount"
-                  placeholder="Amount in Satoshi..."
-                  type="text"
-                  onChange={handleChange}
-                />
-              </div>
+            <div className="mb-4">
+              <TextField
+                id="amount"
+                label="Amount"
+                placeholder="Amount in Satoshi..."
+                type="number"
+                onChange={handleChange}
+              />
             </div>
 
             <div className="mb-4">
-              <label
-                htmlFor="description"
-                className="block font-medium text-gray-700 dark:text-white"
-              >
-                Description
-              </label>
-              <div className="mt-1">
-                <Input
-                  name="description"
-                  placeholder="For e.g. who is sending this payment?"
-                  type="text"
-                  onChange={handleChange}
-                />
-              </div>
+              <TextField
+                id="description"
+                label="Description"
+                placeholder="For e.g. who is sending this payment?"
+                onChange={handleChange}
+              />
             </div>
 
             {/* <div className="mb-5">
@@ -215,6 +200,7 @@ function Receive() {
           <div className="mt-1">
             <Select
               name="expiration"
+              id="expiration"
               value={formData.expiration}
               onChange={handleChange}
             >
@@ -246,16 +232,6 @@ function Receive() {
                   }
                 />
               </div>
-              <a
-                className="underline text-sm text-gray-500 dark:text-gray-400"
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate("/");
-                }}
-              >
-                Cancel
-              </a>
             </div>
           </>
         )}
